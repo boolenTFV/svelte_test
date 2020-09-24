@@ -7,26 +7,35 @@
 
     import UserForm from "../forms/user/Form.svelte";
     import UserEditForm from "../forms/user/EditForm.svelte";
-    import {post, patch} from "../forms/user/actions.js";
+    import {post, patch, deleteAct} from "../forms/user/actions.js";
     import apiFetch from "../services/apiFetch";
+
     import {USERS_ENDPOINT} from "../services/api";
+    import {delay} from "../services/utils";
+
     let isCreateModalOpen = false;
     let searchInputValue = "";
     let search = "";
     let acounts = [];
     let selected = null;
-    let promise = apiFetch.get(`${USERS_ENDPOINT}/accounts/`)
-        .then(result => {
-            if(result.statusCode === 400) {
-                throw result;
-            }
-            return result;
-        });
+
+    let promise = {};
+    const fetch = () => {
+        promise = {};
+        promise = apiFetch.get(`${USERS_ENDPOINT}/accounts/`)
+            .then(result => {
+                if(result.statusCode === 400) {
+                    throw result;
+                }
+                return result;
+            });
+    };
     $: if(searchInputValue.length === 0 && search.length !== 0) {
         search = ""
     }
     $: console.log('selected', selected);
     const searchHandle = () => {search = searchInputValue.toLowerCase().trim()};
+    fetch();
 </script>
 <Nav class="bg-light">
     <div class="search" slot="right">
@@ -50,13 +59,13 @@
             {#if selected === null}
                 <UserForm
                     handleCancel={e => isCreateModalOpen=false}
-                    handleSubmit={post}
+                    handleSubmit={(...args) => post(...args).then(delay(100)).then(fetch)}
                 />
             {:else}
                 <UserEditForm
                     initialValues={selected}
                     handleCancel={e => isCreateModalOpen=false}
-                    handleSubmit={(...args) => patch(selected.uuid, ...args)}
+                    handleSubmit={(...args) => patch(selected.uuid, ...args).then(delay(100)).then(fetch)}
                 />
             {/if}
         </Card>
@@ -67,7 +76,7 @@
         </div>
     {:then result}
         <div transition:fade style="height: 100%">
-            <VirtualList items={result.data.filter(({login=""}) => login.toLowerCase().indexOf(search.toLowerCase()) !== -1)} let:item>
+            <VirtualList items={(result.data || []).filter(({login=""}) => login.toLowerCase().indexOf(search.toLowerCase()) !== -1)} let:item>
                 <Card style="margin: 10px" class="item">
                     <div slot="header">
                         <h3>{item.login}</h3>
@@ -78,7 +87,7 @@
                             selected = item;
                             isCreateModalOpen = true;
                         }} primary outline>Редактировать</Button>
-                        <Button outline>Удалить</Button>
+                        <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then(fetch)}} outline>Удалить</Button>
                     </div>         
                 </Card>
             </VirtualList>

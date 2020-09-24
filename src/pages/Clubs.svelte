@@ -77,25 +77,29 @@
             <Circle2/>
         </div>
     {:then result}
-        <div style="height: 100%">
-            <VirtualList items={(result.data || []).filter(({name=""}) => name.toLowerCase().indexOf(search.toLowerCase()) !== -1)} let:item>
-                <Card style="margin: 10px" class="item">
-                    <div slot="header">
-                        <h3>{item.name}</h3>
-                    </div>
-                    <div class="is-right">
-                        <Button on:click={e => {
-                            navigateTo(`/members/${item.uuid}`)
-                        }} outline>Управление клубом</Button>
-                        <Button on:click={e => {
-                            selected = item;
-                            isCreateModalOpen = true;
-                        }} primary outline>Редактировать</Button>
-                        <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then()}} outline>Удалить</Button>
-                    </div>         
-                </Card>
-            </VirtualList>
-        </div>
+        {#if result.data && result.data.length}
+            <div style="height: 100%">
+                <VirtualList items={(result.data || []).filter(({name=""}) => name.toLowerCase().indexOf(search.toLowerCase()) !== -1)} let:item>
+                    <Card style="margin: 10px" class="item">
+                        <div slot="header">
+                            <h3>{item.name}</h3>
+                        </div>
+                        <div class="is-right">
+                            <Button on:click={e => {
+                                navigateTo(`/members/${item.uuid}`)
+                            }} outline>Управление клубом</Button>
+                            <Button on:click={e => {
+                                selected = item;
+                                isCreateModalOpen = true;
+                            }} primary outline>Редактировать</Button>
+                            <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then(fetch)}} outline>Удалить</Button>
+                        </div>         
+                    </Card>
+                </VirtualList>
+            </div>
+        {:else}
+            Нет данных
+        {/if}
     {:catch error}
         <h1 sytle="align-self: center;" class="text-error">Ошибка получения списка пользователей</h1>
         <cite class="text-error">{error.message} </cite>

@@ -84,7 +84,7 @@
                             selected = item;
                             isCreateModalOpen = true;
                         }} primary outline>Редактировать</Button>
-                        <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then()}} outline>Удалить</Button>
+                        <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then(fetch)}} outline>Удалить</Button>
                     </div>         
                 </ItemCard>
             </VirtualList>

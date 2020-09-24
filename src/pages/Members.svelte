@@ -82,7 +82,7 @@
                             <h3>{item.name}</h3>
                         </div>
                         <div class="is-right">
-                            <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then()}} outline>Удалить</Button>
+                            <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then(fetch)}} outline>Удалить</Button>
                         </div>         
                     </Card>
                 </VirtualList>

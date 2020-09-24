@@ -80,7 +80,7 @@
             <VirtualList items={(result.data || [])} let:item>
                 <ItemCard uuid={item.couple_uuid}>
                     <div slot="controls">
-                        <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then()}} outline>Удалить</Button>
+                        <Button on:click={e => {deleteAct(item.uuid).then(delay(100)).then(fetch)}} outline>Удалить</Button>
                     </div>         
                 </ItemCard>
             </VirtualList>

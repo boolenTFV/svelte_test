@@ -68,3 +68,7 @@ export const fetch = async (id, setData) => {
     const result = await apiFetch.get(`${USERS_ENDPOINT}/account/${id}/`);
     setData && setData(result);
 }
+
+export const deleteAct = async (id) => {
+    await apiFetch.delete(`${USERS_ENDPOINT}/account/${id}/`);
+}
