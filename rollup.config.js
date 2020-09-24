@@ -3,7 +3,10 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import svg from 'rollup-plugin-svelte-svg';
+import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -37,6 +40,12 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		replace({
+			__AUTH_URL__: JSON.stringify(process.env.AUTH_URL),
+			__CLUBS_URL__:  JSON.stringify(process.env.CLUBS_URL),
+			__DANCERS_URL__: JSON.stringify(process.env.DANCERS_URL),
+			__COMPETITIONS_URL__: JSON.stringify(process.env.COMPETITIONS_URL)
+		}),
 		svelte({
 			hydratable: true,
 			// enable run-time checks when not in production
