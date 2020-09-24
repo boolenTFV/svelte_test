@@ -1,15 +1,13 @@
-// server.js
-const { createServer } = require("http");
-const app = require("./dist/App.js");
+const express = require('express');
+const path = require('path');
+const httpProxy = require('http-proxy');
 
-createServer((req, res) => {
-  const { html } = app.render({ url: req.url });
+const apiProxy = httpProxy.createProxyServer();
+const app = express();
+app.use(express.static(path.join(__dirname, '../build')));
 
-  res.write(`
-    <!DOCTYPE html>
-    <div id="app">${html}</div>
-    <script src="/dist/bundle.js"></script>
-  `);
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, './public/build', 'index.html'));
+});
 
-  res.end();
-}).listen(3000);
+app.listen(process.env.PORT || 33334);
