@@ -7,7 +7,37 @@
     let errors={};
     const setErrors = (err) => errors = err;
     const genderCh = [{id: 'М', title: 'М'}, {id: 'Ж', title: 'Ж'}];
-    const groupOpts = [{id: 'L1', title: 'L1'}, {id: 'L2', title: 'L2'}];
+    const groupOpts = [
+        {id: 'дети-1', title: 'дети-1'},
+        {id: 'дети-2', title: 'дети-2'},
+        {id: 'юниоры-1', title: 'юниоры-1'},
+        {id: 'юниоры-2', title: 'юниоры-2'},
+        {id: 'спорт высших достижений', title: 'спорт высших достижений'},
+        {id: 'сеньоры', title: 'сеньоры'}
+    ];
+    const rankOpts = [
+        {id: 'Нет', title: 'Нет'},
+        {id: 'E', title: 'E'},
+        {id: 'D', title: 'D'},
+        {id: 'C', title: 'C'},
+        {id: 'B', title: 'B'},
+        {id: 'A', title: 'A'},
+        {id: 'S', title: 'S'},
+        {id: 'M', title: 'M'}
+    ];
+    const trOpts = [
+        {id: 'Нет', title: 'Нет'},
+        {id: 'Тренер', title: 'Тренер'},
+        {id: 'Заслуженный тренер', title: 'Заслуженный тренер'}
+    ];
+    const refereeOpts = [
+        {id: 'Нет', title: 'Нет'},
+        {id: 'Юный спортивный судья', title: 'Юный спортивный судья'},
+        {id: 'Спортивный судья 1-й категории', title: 'Спортивный судья 1-й категории'},
+        {id: 'Спортивный судья 2-й категории', title: 'Спортивный судья 2-й категории'},
+        {id: 'Спортивный судья 3-й категории', title: 'Спортивный судья 3-й категории'},
+        {id: 'Спортивный судья всероссийской категории', title: 'Спортивный судья всероссийской категории'}
+    ];
 </script>
 
 <Form
@@ -63,6 +93,27 @@
         options={groupOpts} />
     {#if errors["age_group"] && touched["age_group"]}
         <div class="message">{errors["age_group"]}</div>
+    {/if}
+    <Select
+        label="Ранг"
+        name="rank"
+        options={trOpts} />
+    {#if errors["rank"] && touched["rank"]}
+        <div class="message">{errors["rank"]}</div>
+    {/if}
+    <Select
+        label="Категория тренера"
+        name="trainer_rank"
+        options={trOpts} />
+    {#if errors["trainer_rank"] && touched["trainer_rank"]}
+        <div class="message">{errors["trainer_rank"]}</div>
+    {/if}
+        <Select
+        label="Категория судьи"
+        name="referee_rank"
+        options={refereeOpts} />
+    {#if errors["referee_rank"] && touched["referee_rank"]}
+        <div class="message">{errors["referee_rank"]}</div>
     {/if}
     <label>Пол</label>
     <Choice
